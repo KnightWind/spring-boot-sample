@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fpx.xinyou.mapper.UserLoginRecordMapper">
+	 
+	 <insert id="insertRecord" parameterType="com.fpx.xinyou.model.UserLoginRecord">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+		  	select SEQ_USERLOGINRD.nextval from dual
+		</selectKey>
+		insert into XY_USER_LOGIN_RECORD
+		  (id, AUTH_KEY, USER_ID, LOGIN_TIME,LAST_ACTIVE_TIME, ACTIVE_FLAG)
+		values
+		  (#{id}, #{authKey}, #{userId}, #{loginTime}, #{lastActiveTime}, #{activeFlag})
+	</insert>
+	
+	
+	<update id="updateActiveFlag" parameterType="int">
+		update XY_USER_LOGIN_RECORD set ACTIVE_FLAG = 0 where USER_ID = #{1}
+	</update>
+</mapper>

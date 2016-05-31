@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fpx.xinyou.mapper.ScansDataMapper">
+	<select id="getBgCodeNum" resultType="int"  parameterType="string">  
+     	 select count(1) from oprt.tms_bag where bg_code = #{1}
+	</select>
+	
+	<!-- 判断该bgCode是否已经被扫描过 -->
+	<select id="getBgCodeRdNum" resultType="int"  parameterType="string">  
+     	 select count(1) from messager.XY_SCANSDATA where BG_CODE = #{1}
+	</select>
+	
+	
+	<select id="getBgIdByCode" resultType="int"  parameterType="string">  
+     	 select bg_id from oprt.tms_bag where bg_code = #{1}
+	</select>
+	
+	
+	
+	<select id="getBsIds" resultType="long"  parameterType="int">  
+     	 select BS_ID from  oprt.tms_bagitem  where bg_id = #{1} union all
+		 select BS_ID from  oprt.tms_bagitem_sort  where bg_id = #{1}
+	</select>
+	
+	
+	<select id="getTrkId" resultType="long">  
+     	 select SEQ_Track.nextval from dual
+	</select>
+	
+	
+	<insert id="insertScansData" parameterType="com.fpx.xinyou.model.ScansData">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+		  	select SEQ_SCANSDATA.nextval from dual
+		</selectKey>
+		insert into XY_SCANSDATA
+		  (id, AWB_CODE, BG_CODE, SCAN_TIME,SEND_TIME, STATE)
+		values
+		  (#{id}, #{awbCode}, #{bgCode}, #{scanTime}, #{sendTime}, #{state})
+	</insert>
+	
+	
+	<insert id="insertTrack" parameterType="map">
+		<selectKey keyProperty="TRK_ID" resultType="long" order="BEFORE">
+		  	select SEQ_Track.nextval from dual
+		</selectKey>
+		insert into TAK_TRACK
+		  (TRK_ID,
+		   TBS_ID,
+		   TK_CODE, 
+		   MST_CODE,
+		   TRK_OCCURDATE,
+		   TRK_CREATEDATE,
+		   TRK_CREATEPERSON, 
+		   FILE_ID, 
+		   TRK_AREADESCRIPTION)
+		values
+		  (#{TRK_ID}, 
+		  #{TBS_ID},
+		  #{TK_CODE},
+		  #{MST_CODE},
+		  #{TRK_OCCURDATE},
+		  #{TRK_CREATEDATE},
+		  #{TRK_CREATEPERSON},
+		  #{FILE_ID},
+		  #{TRK_AREADESCRIPTION})
+	</insert>
+	
+	
+	<insert id="insertTrackAttach" parameterType="map">
+		insert into TAK_TRACKATTACH
+		  (TRK_ID,
+		   TRK_SERVICEDESCRIPTION,
+		   TRK_SERVICECODE, 
+		   TRK_SIGNATORY,
+		   TRK_TRACKSOURCE)
+		values
+		  (#{TRK_ID}, 
+		  #{TRK_SERVICEDESCRIPTION},
+		  #{TRK_SERVICECODE},
+		  #{TRK_SIGNATORY},
+		  #{TRK_TRACKSOURCE}
+		)
+	</insert>
+	
+	
+	<update id="updateTrakBussin" parameterType="map">
+		update TAK_TRACKINGBUSINESS 
+		<set>
+			<if test="ctCode != null">
+				CT_CODE = #{ctCode},
+			</if>
+			<if test="operationDate != null">
+				TBS_LASTOPERATIONDATE = #{operationDate},
+			</if>
+			<if test="tkCode != null">
+				TK_CODE_LAST = #{tkCode},
+			</if>
+			<if test="tkTime != null">
+				TBS_LASTTRACKDATE = #{tkTime},
+			</if>
+			<if test="tkLocation != null">
+				TBS_LASTTRACKLOCATION = #{tkLocation}
+			</if>
+		</set>
+		where CTM_ID = 1 and TBS_REFERENCENO = #{bsId}
+	</update>
+	
+</mapper>
