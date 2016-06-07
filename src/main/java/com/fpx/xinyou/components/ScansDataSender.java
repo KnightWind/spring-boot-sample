@@ -3,6 +3,7 @@ package com.fpx.xinyou.components;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class ScansDataSender implements RabbitTemplate.ConfirmCallback{
 	
 	private CodecFactory codec;
 	
+	private static final Logger logger = Logger.getLogger(ScansDataSender.class);
 	
 	@Autowired
 	public ScansDataSender(RabbitTemplate rabbitTemplate,CodecFactory codec) {
@@ -63,6 +65,7 @@ public class ScansDataSender implements RabbitTemplate.ConfirmCallback{
 			 String strMsg = "";
 			 ObjectMapper mapper = new ObjectMapper();
 			 strMsg = mapper.writeValueAsString(o);
+			 logger.info("the msg will send to mq is: "+strMsg);
 			 rabbitTemplate.convertAndSend(AmqpConfig.EXCHANGE, AmqpConfig.ROUTINGKEY, strMsg, correlationId);
 		 } catch (Exception e) {
 			 e.printStackTrace();

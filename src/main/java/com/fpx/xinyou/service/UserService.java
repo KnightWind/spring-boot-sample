@@ -14,8 +14,6 @@ import com.fpx.xinyou.mapper.UserMapper;
 import com.fpx.xinyou.model.User;
 import com.fpx.xinyou.model.UserLoginRecord;
 
-import tk.mybatis.mapper.entity.Example;
-
 @Service
 public class UserService {
 	
@@ -24,7 +22,6 @@ public class UserService {
 	
 	@Autowired
 	private UserLoginRecordMapper recoedMapper;
-	
 	
 	@Resource(name="MD5")
 	private MD5 MD5;

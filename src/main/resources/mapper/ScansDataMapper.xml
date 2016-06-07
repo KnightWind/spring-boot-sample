@@ -11,21 +11,29 @@
 	</select>
 	
 	
-	<select id="getBgIdByCode" resultType="int"  parameterType="string">  
+	<select id="getBgIdByCode" resultType="long"  parameterType="string">  
      	 select bg_id from oprt.tms_bag where bg_code = #{1}
 	</select>
 	
-	
-	
-	<select id="getBsIds" resultType="long"  parameterType="int">  
+	<select id="getBsIds" resultType="long"  parameterType="long">  
      	 select BS_ID from  oprt.tms_bagitem  where bg_id = #{1} union all
+		 select BS_ID from  oprt.tms_bagitem_sort  where bg_id = #{1}
+	</select>
+	
+	<!-- 获取  t_sg_bag id -->
+	<select id="getSgBagIdByCode" resultType="long"  parameterType="string">  
+     	 select ID from oprt.t_sg_bag where bg_code = #{1}
+	</select>
+	
+	<select id="getSgBsIds" resultType="long"  parameterType="long">  
+     	 select BS_ID from  oprt.t_sg_bagitem  where bg_id = #{1} union all
 		 select BS_ID from  oprt.tms_bagitem_sort  where bg_id = #{1}
 	</select>
 	
 	
 	<select id="getTrkId" resultType="long">  
-     	 select SEQ_Track.nextval from dual
-	</select>
+     	 select SEQ_Track.nextval from dual 
+	</select> 
 	
 	
 	<insert id="insertScansData" parameterType="com.fpx.xinyou.model.ScansData">

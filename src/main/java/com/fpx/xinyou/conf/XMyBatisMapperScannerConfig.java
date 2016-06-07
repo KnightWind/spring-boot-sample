@@ -24,5 +24,6 @@ public class XMyBatisMapperScannerConfig {
         mapperScannerConfigurer.setProperties(properties);
         return mapperScannerConfigurer;
     }
-
+    
+    
 }

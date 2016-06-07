@@ -1,6 +1,5 @@
 package com.fpx.xinyou.mapper;
 
-import com.fpx.xinyou.model.User;
 import com.fpx.xinyou.model.UserLoginRecord;
 import com.fpx.xinyou.util.MyMapper;
 

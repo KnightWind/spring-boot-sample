@@ -1,5 +1,6 @@
 package com.fpx.xinyou.conf;
 
+import org.apache.log4j.Logger;
 import org.springframework.amqp.core.AcknowledgeMode;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -19,6 +20,7 @@ import org.springframework.context.annotation.Scope;
 import com.fpx.xinyou.components.MessageAdapterHandler;
 import com.fpx.xinyou.components.ScansDataMQProcess;
 import com.fpx.xinyou.service.ScansDataService;
+import com.fpx.xinyou.util.BaseConfig;
 import com.fpx.xinyou.util.CodecFactory;
 import com.fpx.xinyou.util.EventProcesser;
 import com.fpx.xinyou.util.HessionCodecFactory;
@@ -32,12 +34,19 @@ public class AmqpConfig {
 	public static final String QUEUE   = "xy-data-queue";
     public static final String ROUTINGKEY = "xy-data-routingkey";
     
+    private static final Logger logger = Logger.getLogger(AmqpConfig.class);
+    
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        connectionFactory.setAddresses("172.16.30.50:5672");
-        connectionFactory.setUsername("lz");
-        connectionFactory.setPassword("0");
+        logger.info("will call propties file!");
+        logger.info("get propties address = "+BaseConfig.getInstance().getString("mq.address"));
+        connectionFactory.setAddresses(BaseConfig.getInstance().getString("mq.address"));
+        connectionFactory.setUsername(BaseConfig.getInstance().getString("mq.user"));
+        connectionFactory.setPassword(BaseConfig.getInstance().getString("mq.password"));
+//        connectionFactory.setAddresses("172.16.30.50:5672");
+//        connectionFactory.setUsername("lz");
+//        connectionFactory.setPassword("0");
         connectionFactory.setVirtualHost("/");
         connectionFactory.setPublisherConfirms(true); //必须要设置
         return connectionFactory;
@@ -101,8 +110,8 @@ public class AmqpConfig {
             public void onMessage(Message message, Channel channel) throws Exception {
 	            	byte[] body = message.getBody();
 	            	String msg = new String(body);
-	            	//System.out.println("消费者收到消息！");
-	                //System.out.println("receive msg : " + msg);
+	            	//System.out.println("消费者收到消息！"); 
+	            	logger.info("receive msg : " + msg);
 	                channel.basicAck(message.getMessageProperties().getDeliveryTag(), false); //确认消息成功消费
 	                ScansDataService.getInstance().process(msg);
             }

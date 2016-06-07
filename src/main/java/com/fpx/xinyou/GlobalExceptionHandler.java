@@ -15,8 +15,8 @@ public class GlobalExceptionHandler {
 	
 	
 	@ExceptionHandler(value = Exception.class)
-    public void defaultErrorHandler(HttpServletRequest req,HttpServletResponse response) throws Exception {
-        
+    public void defaultErrorHandler(HttpServletRequest req,HttpServletResponse response,Exception e) throws Exception {
+		e.printStackTrace();
 		response.setCharacterEncoding("UTF-8");
  		response.setContentType("application/json");
 		ObjectMapper mapper = new ObjectMapper();

@@ -1,10 +1,13 @@
 package com.fpx.xinyou.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,13 +40,16 @@ public class DataProcessService {
 	@Autowired
 	TrackAttachMapper trackAttachMapper;
 	
+	@Resource
+	OprtService oprtService;
+	
 	/**
 	 * 根据袋号查询该袋号在数据库是否存在
 	 * @param bgCode
 	 * @return
 	 */
 	public boolean checkBgCode(String bgCode){
-		int count = scansDataMapper.getBgCodeNum(bgCode);
+		int count = oprtService.getBgCodeNum(bgCode);
 		return count > 0;
 	}
 	
@@ -53,8 +59,9 @@ public class DataProcessService {
 	 * @param bgCode
 	 * @return
 	 */
-	public int getBgId(String bgCode){
-		Integer id = scansDataMapper.getBgIdByCode(bgCode);
+	public long getBgId(String bgCode){
+		Long id = oprtService.getBgIdByCode(bgCode);
+		if(id == null || id == 0) id = oprtService.getSgBagIdByCode(bgCode); 
 		return (id == null)?0:id;
 	}
 	
@@ -63,7 +70,6 @@ public class DataProcessService {
 		
 		scansDataMapper.insertList(datas);
 	}
-	
 	
 	
 	/**
@@ -85,19 +91,33 @@ public class DataProcessService {
 	}
 	
 	
+	public List<Long> getBsIdsByBgCode(String bgCode){
+		Long id = oprtService.getBgIdByCode(bgCode);
+		if(id != null && id > 0){
+			return oprtService.getBsIds(id);
+		}else{
+			id = oprtService.getSgBagIdByCode(bgCode);
+			if(id != null && id > 0) return oprtService.getSgBsIds(id);
+		}
+		return null;
+	}
 	
 	/**
 	 * 更新轨迹信息
 	 * @param bgId
 	 * @param data
 	 */
-	public boolean updateTrackInfo(int bgId,ScansData data,User user){
-		
+	public boolean updateTrackInfo(ScansData data,User user){
 		try{
+//			List<Long> bsIds = new ArrayList<Long>();
+//			List<Long> ids = scansDataMapper.getBsIds(bgId);
+//			List<Long> sgIds = scansDataMapper.getSgBsIds(bgId);
+//			if(ids != null)bsIds.addAll(ids);
+//			if(sgIds != null)bsIds.addAll(bsIds);
+			List<Long> bsIds = getBsIdsByBgCode(data.getBgCode());
+			if(bsIds == null || bsIds.isEmpty()) return false;
 			
-			List<Long> bsIds = scansDataMapper.getBsIds(bgId);
-			if(bsIds != null && !bsIds.isEmpty()){
-				for (Iterator iterator = bsIds.iterator(); iterator.hasNext();) {
+			for (Iterator iterator = bsIds.iterator(); iterator.hasNext();) {
 					Long bsId = (Long) iterator.next();
 					
 					Long trkId = scansDataMapper.getTrkId();
@@ -127,9 +147,8 @@ public class DataProcessService {
 					tkBusiness.put("tkTime", data.getScanTime());
 					tkBusiness.put("tkLocation", SysConstant.XY_TK_DEST);
 					scansDataMapper.updateTrakBussin(tkBusiness);
-				}
-				//批量保存
 			}
+			//批量保存
 		}catch(Exception e){
 			e.printStackTrace();
 			return false;

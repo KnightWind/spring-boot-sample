@@ -1,6 +1,5 @@
 package com.fpx.xinyou.mapper;
 
-import java.util.List;
 import java.util.Map;
 
 import com.fpx.xinyou.model.ScansData;
@@ -14,7 +13,7 @@ import com.fpx.xinyou.util.MyMapper;
  */
 public interface ScansDataMapper extends MyMapper<ScansData>{
 	
-	int getBgCodeNum(String bgCode);
+//	int getBgCodeNum(String bgCode);
 	
 	
 	int getBgCodeRdNum(String bgCode);
@@ -28,7 +27,7 @@ public interface ScansDataMapper extends MyMapper<ScansData>{
 	 * @param bgCode
 	 * @return
 	 */
-	Integer getBgIdByCode(String bgCode);
+//	Long getBgIdByCode(String bgCode);
 	
 	
 	
@@ -37,7 +36,22 @@ public interface ScansDataMapper extends MyMapper<ScansData>{
 	 * @param bgId
 	 * @return
 	 */
-	List<Long> getBsIds(int bgId);
+//	List<Long> getBsIds(long bgId);
+	
+	/**
+	 * 根据bagCode查询袋子id
+	 * @param bgCode
+	 * @return
+	 */
+//	Long getSgBagIdByCode(String bgCode);
+	
+	
+	/**
+	 * 查询sg bs id集合
+	 * @param bgId
+	 * @return
+	 */
+//	List<Long> getSgBsIds(long bgId);
 	
 	
 	
