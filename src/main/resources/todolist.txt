@@ -1,3 +1,0 @@
-1.添加oralce驱动，测试Oracle数据库的crud操作
-2.数据接收API contorller实现。 接收数据>保存至容器>反馈客户端
-3.task监听/扫描容器内容  > 处理数据

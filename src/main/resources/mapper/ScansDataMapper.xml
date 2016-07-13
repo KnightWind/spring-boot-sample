@@ -91,6 +91,26 @@
 	</insert>
 	
 	
+	<insert id="insertTrackHawbCode" parameterType="map">
+		insert into TAK_TRACKHAWBCODE
+		  (TBS_ID,
+		   TBS_HAWBCODE)
+		values
+		  (#{TBS_ID}, 
+		  #{TBS_HAWBCODE})
+	</insert>
+	
+	
+	<select id="getTrakBussinBsId" resultType="Long" parameterType="string">  
+     	 select TBS_ID from TAK_TRACKINGBUSINESS where CTM_ID = 1 and TBS_REFERENCENO = #{1}
+	</select> 
+	
+	
+	<select id="getTrackHawbCodeCount" resultType="int" parameterType="map">  
+     	 select count(*) from TAK_TRACKHAWBCODE where TBS_ID = #{TBS_ID} and TBS_HAWBCODE = #{TBS_HAWBCODE}
+	</select> 
+	
+	
 	<update id="updateTrakBussin" parameterType="map">
 		update TAK_TRACKINGBUSINESS 
 		<set>
@@ -110,7 +130,19 @@
 				TBS_LASTTRACKLOCATION = #{tkLocation}
 			</if>
 		</set>
-		where CTM_ID = 1 and TBS_REFERENCENO = #{bsId}
+		where TBS_ID = #{tbsId}
+	</update>
+	
+	
+	
+	<update id="updateTrakBussinAttach" parameterType="map">
+		update tak_trackingbusinessattach 
+		<set>
+			<if test="content != null">
+				TBS_LASTTRACKCONTENT = #{content},
+			</if>
+		</set>
+		where TBS_ID = #{tbsId}
 	</update>
 	
 </mapper>

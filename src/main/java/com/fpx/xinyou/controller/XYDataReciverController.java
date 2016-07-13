@@ -62,12 +62,12 @@ public class XYDataReciverController {
 		 try {
 		 		User currUser = userService.getUserBySid(authkey);
 		 		//mq消息异步处理
-		 		MqMsgData mmd = new MqMsgData(datas,currUser);
-		 		boolean flag = sender.sendMsg(mmd);
+//		 		MqMsgData mmd = new MqMsgData(datas,currUser);
+//		 		boolean flag = sender.sendMsg(mmd);
 		 		//如果传递消息到mq失败，开启直接处理线程
-		 		if(!flag){
+//		 		if(!flag){
 		 			ScansDataService.getInstance().process(datas,currUser);
-		 		}
+//		 		}
 			} catch (Exception e) {
 				e.printStackTrace();
 			} 

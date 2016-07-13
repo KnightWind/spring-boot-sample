@@ -1,10 +1,9 @@
 # Maven #
 target/
+.svn/
+catalina.base_IS_UNDEFINED/
 
 # Eclipse #
 .settings/
 .classpath
 .project
-
-# jrebel #
-src/main/resources/rebel.xml

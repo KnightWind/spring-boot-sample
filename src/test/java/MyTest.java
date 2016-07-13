@@ -27,7 +27,11 @@ public class MyTest {
 //		bsIds.addAll(ids);
 //		bsIds.addAll(sgIds);
 		
-		System.out.println("Hello!");
+		int i = 6 & 5;
+		//0110  0101
+//		preg_match('/^(?!string)/', 'aa') === true 
+		System.out.println("Hello!" + i);
+		
 		
 //		retrofit.
 		

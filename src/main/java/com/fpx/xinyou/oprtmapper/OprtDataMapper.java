@@ -48,4 +48,11 @@ public interface OprtDataMapper extends MyOprtMapper<ScansData>{
 	List<Long> getSgBsIds(long bgId);
 	
 	
+	/**
+	 * 混装袋id
+	 * @param mixBgId
+	 * @return
+	 */
+	List<Long> getSubBagIds(long mixBgId);
+	
 }

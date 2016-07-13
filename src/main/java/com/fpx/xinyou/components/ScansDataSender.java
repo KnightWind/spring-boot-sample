@@ -65,7 +65,7 @@ public class ScansDataSender implements RabbitTemplate.ConfirmCallback{
 			 String strMsg = "";
 			 ObjectMapper mapper = new ObjectMapper();
 			 strMsg = mapper.writeValueAsString(o);
-			 logger.info("the msg will send to mq is: "+strMsg);
+			 logger.warn("the msg will send to mq is: "+strMsg);
 			 rabbitTemplate.convertAndSend(AmqpConfig.EXCHANGE, AmqpConfig.ROUTINGKEY, strMsg, correlationId);
 		 } catch (Exception e) {
 			 e.printStackTrace();

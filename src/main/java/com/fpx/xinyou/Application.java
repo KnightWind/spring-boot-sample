@@ -32,12 +32,14 @@ public class Application extends WebMvcConfigurerAdapter {
      * 添加拦截器
      */
     public void addInterceptors(InterceptorRegistry registry) {  
-        registry.addInterceptor(new AuthenticationInterceptor()).addPathPatterns("/xy/scans");  
+    	 registry.addInterceptor(new AuthenticationInterceptor()).addPathPatterns("/xy/scans");  
     }  
+    
     
     
     @RequestMapping("/")
     String home() {
         return "";
     }
+
 }

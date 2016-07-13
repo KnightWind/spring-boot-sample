@@ -12,10 +12,13 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.ChannelAwareMessageListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.env.Environment;
 
 import com.fpx.xinyou.components.MessageAdapterHandler;
 import com.fpx.xinyou.components.ScansDataMQProcess;
@@ -28,7 +31,7 @@ import com.rabbitmq.client.Channel;
 
 
 @Configuration
-public class AmqpConfig {
+public class AmqpConfig implements EnvironmentAware {
 	
 	public static final String EXCHANGE   = "xy-data-exchange";
 	public static final String QUEUE   = "xy-data-queue";
@@ -36,14 +39,20 @@ public class AmqpConfig {
     
     private static final Logger logger = Logger.getLogger(AmqpConfig.class);
     
+    
+    private Environment env;
+    
     @Bean
     public ConnectionFactory connectionFactory() {
         CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-        logger.info("will call propties file!");
+        logger.info("will call yml file!" + env.getProperty("mymq.address"));
         logger.info("get propties address = "+BaseConfig.getInstance().getString("mq.address"));
         connectionFactory.setAddresses(BaseConfig.getInstance().getString("mq.address"));
         connectionFactory.setUsername(BaseConfig.getInstance().getString("mq.user"));
         connectionFactory.setPassword(BaseConfig.getInstance().getString("mq.password"));
+//        connectionFactory.setAddresses(env.getProperty("mymq.address"));
+//        connectionFactory.setUsername(env.getProperty("mymq.user"));
+//        connectionFactory.setPassword(env.getProperty("mymq.password"));
 //        connectionFactory.setAddresses("172.16.30.50:5672");
 //        connectionFactory.setUsername("lz");
 //        connectionFactory.setPassword("0");
@@ -118,4 +127,10 @@ public class AmqpConfig {
         });
         return container;
     }
+
+
+	@Override
+	public void setEnvironment(Environment e) {
+		this.env = e;
+	}
 }

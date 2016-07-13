@@ -49,21 +49,28 @@ public class ProcessDataTask implements Runnable {
 			ScansData ssd = (ScansData) iterator.next();
 			logger.info("the scansdata is "+ssd);
 			//if the bgCode has been processed, skip it
-			if(sevice.bgCodeExist(ssd.getBgCode())) continue;
-			
-			long bgId = sevice.getBgId(ssd.getBgCode());
-			if(bgId > 0){
-				ssd.setStatus(ScansDataStatus.VAILDATED);
-				boolean flag = sevice.updateTrackInfo(ssd,user);
-				if(flag){
-					ssd.setStatus(ScansDataStatus.TRACKED);
+			try{
+				if(sevice.bgCodeExist(ssd.getBgCode())) continue;
+				
+				long bgId = sevice.getBgId(ssd.getBgCode());
+				if(bgId > 0){
+					ssd.setStatus(ScansDataStatus.VAILDATED);
+					boolean flag = sevice.updateTrackInfo(ssd,user);
+					if(flag){
+						ssd.setStatus(ScansDataStatus.TRACKED);
+					}
+				}else{
+					logger.info("the bg_code "+ssd.getBgCode()+"get bgid: "+bgId+" mean the bg_code is not belong 4px");
+					ssd.setStatus(ScansDataStatus.VAILDATE_FAILED);
 				}
-			}else{
-				ssd.setStatus(ScansDataStatus.VAILDATE_FAILED);
+				if(ssd.getSendTime() == null) ssd.setSendTime(new Date());
+				logger.info("will save scans data ");
+				sevice.saveScansData(ssd);
+				
+			}catch(Exception e){
+				e.printStackTrace();
+				continue;
 			}
-			if(ssd.getSendTime() == null) ssd.setSendTime(new Date());
-			logger.info("will save scans data ");
-			sevice.saveScansData(ssd);
 		}
 	}
 
