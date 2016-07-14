@@ -10,6 +10,9 @@ public interface SysConstant {
 	String XY_TK_DEST = "SINGAPORE";
 	
 	
+	String XY_TK_CODE_NAME = "Arrive at Airport";
+	
+	
 	//新加坡国家码
 	String COUNTRY_CODE_SINGAPORE = "SG";
 	

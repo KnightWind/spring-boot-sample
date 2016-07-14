@@ -23,7 +23,6 @@ public class Application extends WebMvcConfigurerAdapter {
 	
 	
     public static void main(String[] args) {
-    	
     	final ApplicationContext applicationContext = SpringApplication.run(Application.class, args);
     	ApplicationContextUtil.regsiteContext(applicationContext);
     }
@@ -39,6 +38,7 @@ public class Application extends WebMvcConfigurerAdapter {
     
     @RequestMapping("/")
     String home() {
+//    	jmsTemplate.send(caiNiaoTrackQueue, messageCreator);
         return "";
     }
 

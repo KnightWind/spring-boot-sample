@@ -11,6 +11,7 @@ import com.fpx.xinyou.controller.XYDataReciverController;
 import com.fpx.xinyou.model.ScansData;
 import com.fpx.xinyou.model.User;
 import com.fpx.xinyou.service.DataProcessService;
+import com.fpx.xinyou.service.TrackProcessService;
 import com.fpx.xinyou.util.ApplicationContextUtil;
 
 
@@ -45,6 +46,10 @@ public class ProcessDataTask implements Runnable {
 		DataProcessService sevice = (DataProcessService) ApplicationContextUtil
 				.getBeanByClass(DataProcessService.class);
 		
+		
+		TrackProcessService trackSevice = (TrackProcessService) ApplicationContextUtil
+				.getBeanByClass(TrackProcessService.class);
+		
 		for (Iterator iterator = datas.iterator(); iterator.hasNext();) {
 			ScansData ssd = (ScansData) iterator.next();
 			logger.info("the scansdata is "+ssd);
@@ -52,7 +57,10 @@ public class ProcessDataTask implements Runnable {
 			try{
 				if(sevice.bgCodeExist(ssd.getBgCode())) continue;
 				
+				//查询袋子下的单票信息
 				long bgId = sevice.getBgId(ssd.getBgCode());
+				List<Long> bsIds = sevice.getBsIdsByBgCode(ssd.getBgCode());
+				
 				if(bgId > 0){
 					ssd.setStatus(ScansDataStatus.VAILDATED);
 					boolean flag = sevice.updateTrackInfo(ssd,user);
@@ -67,9 +75,14 @@ public class ProcessDataTask implements Runnable {
 				logger.info("will save scans data ");
 				sevice.saveScansData(ssd);
 				
+				logger.info("will send track to mq  if it's needed ");
+				trackSevice.sendTrackInfoToMq(bsIds);
 			}catch(Exception e){
 				e.printStackTrace();
+				logger.error("process data "+ssd.getBgCode()+" failed!");
+				
 				continue;
+				
 			}
 		}
 	}

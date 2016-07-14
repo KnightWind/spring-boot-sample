@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fpx.xinyou.mapper.DataDictionaryMapper">
+	
+	<select id="getAllTsvMapping" resultType="map">  
+     	 select a.eor_value as sn_code,b.eor_value_start sn_value 
+     	  from bsr_easyoperationrule a,bsr_easyoperationrulevalue b where a.br_id=b.br_id 
+     	  and a.eok_code='ST'
+	</select>
+	
+	
+	<select id="getXtdTrackMappings" resultType="com.fpx.xinyou.model.XtdTrackMappingItem">  
+     	  select cm_id, tk_code, rtk_code from xtd_receivertrackmapping t
+	</select>
+	
+</mapper>

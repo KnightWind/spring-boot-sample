@@ -33,4 +33,45 @@
 		select IT_BG_ID from t_sg_bags_mix_item  where MIX_BG_ID = #{1}
 	</select>
 	
+	
+	<!-- 查询渠道ID -->
+	<select id="getSnIdByBsId" resultType="string" parameterType="long">
+		select sn_id from bsn_business where bs_id = #{1}
+		union all
+		select sn_id from bsn_mailitem where bs_id = #{1}
+	</select>
+	
+	
+	<select id="getItemCmId"  parameterType="long" resultType="string">
+		select tm.cm_id_shipper from oprt.bsn_mailitem tm where tm.bs_id = #{1} union
+ 		select tb.cm_id_shipper from oprt.bsn_business tb where tb.bs_id = #{1}
+	</select>
+	
+<!-- 	<select id="selectAtcBagItemByBgId" statementType="PREPARED" parameterType="java.lang.String" resultType="fpx.xms.job.sgpost.model.SgBagItemInfo"> -->
+<!-- 		select  -->
+<!-- 			bi.bg_id bgId, -->
+<!-- 	       bi.bs_id bsId, -->
+<!-- 	       bi.st_id_create stIdCreate, -->
+<!-- 	       (select st_name from hmr_staff s where s.st_id = bi.st_id_create) stNameCreate, -->
+<!-- 	       to_char(bi.create_date, 'yyyy-mm-dd hh24:mi:ss') createDate, -->
+<!-- 	       (case  -->
+<!-- 	       		when (select m.mi_servehawbcode from bsn_mailitem m where m.bs_id = bi.bs_id) is null  -->
+<!-- 	       		then (select e.eh_servehawbcode from bsn_expressexport e where e.bs_id = bi.bs_id)  -->
+<!-- 	       		else (select m.mi_servehawbcode from bsn_mailitem m where m.bs_id = bi.bs_id) -->
+<!-- 	       	end) serveCode, -->
+<!-- 	       (case  -->
+<!-- 	       		when (select m.mi_grossweight from bsn_mailitem m where m.bs_id = bi.bs_id) is null  -->
+<!-- 	       		then (select trim(to_char(bs.bs_grossweight,'999990.999')) from bsn_business bs where bs.bs_id = bi.bs_id)  -->
+<!-- 	       		else (select trim(to_char(m.mi_grossweight,'999990.999')) from bsn_mailitem m where m.bs_id = bi.bs_id) -->
+<!-- 	       	end) wight -->
+<!--   		 from t_sg_bagitem bi -->
+<!-- 		 where bi.bg_id = #{1} -->
+<!-- 	</select> -->
+	
+	
+	<select id="getCarogHawbCodeMapByBsId" resultType="map" parameterType="Long">
+		select MI_SHIPPERHAWBCODE as cHawbCode, MI_SERVEHAWBCODE as sHawbCode from oprt.bsn_mailitem where bs_id = #{1}
+		union
+		select EH_SHIPPERHAWBCODE as cHawbCode, EH_SERVEHAWBCODE as sHawbCode from oprt.bsn_expressexport where bs_id =#{1}
+	</select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.fpx.xinyou.oprtmapper;
 
 import java.util.List;
+import java.util.Map;
 
 import com.fpx.xinyou.model.ScansData;
 import com.fpx.xinyou.util.MyOprtMapper;
@@ -55,4 +56,29 @@ public interface OprtDataMapper extends MyOprtMapper<ScansData>{
 	 */
 	List<Long> getSubBagIds(long mixBgId);
 	
+	
+	/**
+	 * 查询渠道ID
+	 * @param bsId
+	 * @return
+	 */
+	String getSnIdByBsId(Long bsId);
+	
+	
+	
+	
+	/**
+	 * 查询HawbCode
+	 * @param bsId
+	 * @return
+	 */
+	Map<String,Object> getCarogHawbCodeMapByBsId(Long bsId);
+	
+	
+	/**
+	 * 查询单票的cmId
+	 * @param bsId
+	 * @return
+	 */
+	String getItemCmId(Long bsId);
 }

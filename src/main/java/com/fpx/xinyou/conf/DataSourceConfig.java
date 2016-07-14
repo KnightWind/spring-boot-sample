@@ -56,5 +56,12 @@ public class DataSourceConfig  {
     	return DataSourceBuilder.create().build();
     }
     
+    @Bean(name="ctrDs")
+    @ConfigurationProperties(prefix="ctr.datasource")
+    public DataSource ctrDataSource(){
+ 
+    	return DataSourceBuilder.create().build();
+    }
+    
  
 }
